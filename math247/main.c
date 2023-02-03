@@ -1,16 +1,18 @@
 #include <stdio.h>
 #include <math.h>
 
+int CORRECT_DIGIT = 3;
+
 // CORRESPONDING FUNCTION:
 //-----------------------------------------------//
 double function(double x) {
-    double res = x - cos(x);
+    double res = pow(x, 3) - sin(x) + 1;
 
     return res;
 }
 
 double function_derivative(double x) {
-    double res = 1 + sin(x);
+    double res = 3*pow(x, 2) - cos(x);
 
     return res;
 }
@@ -19,6 +21,7 @@ double function_derivative(double x) {
 // FUNCTIONS' DECLARATIONS:
 //-----------------------------------------------//
 double limit_decimal(int max, double num);
+int check_boundary(float lower, float upper);
 //-----------------------------------------------//
 
 // ROOT FINDING METHODS' DECLARATIONS:
@@ -32,17 +35,25 @@ double SECANT(double lower_bound, double upper_bound);
 // MAIN FUNCTION:
 //-----------------------------------------------//
 int main() {
+    float lower_bound = -2;
+    float upper_bound = 0;
+
+    if (!check_boundary(lower_bound, upper_bound)) {
+        printf("Invalid Boundary!");
+        return 0;
+    }
+
     // BISECTION(lower_bound, upper_bound); 
-    BISECTION(0, 100);
+    BISECTION(lower_bound, upper_bound);
 
     // NEWTON-RAPHSON(random_point); 
-    NEWTON_RAPHSON(2);
+    NEWTON_RAPHSON(lower_bound);
 
     // REGULA-FALSI(lower_bound, upper_bound); 
-    REGULA_FALSI(0, 100);
+    REGULA_FALSI(lower_bound, upper_bound);
     
     // SECANT(lower_bound, upper_bound); 
-    SECANT(0, 100);
+    SECANT(lower_bound, upper_bound);
 
     return 0;
 }
@@ -51,6 +62,7 @@ int main() {
 // ROOT FINDING METHODS' DEFINATIONS:
 //-----------------------------------------------//
 double BISECTION(double lower_bound, double upper_bound) {
+    printf("%d", check_boundary(lower_bound, upper_bound));
     printf("\n------------------------------------\n");
     printf("Running Bisection Method (lower --> upper --> x --> f(x)):\n");
     printf("Lower Bound: %f\n", lower_bound);
@@ -70,8 +82,8 @@ double BISECTION(double lower_bound, double upper_bound) {
             lower_bound = x;
         }
 
-        x =limit_decimal(9, x);
-        prev_x = limit_decimal(9, prev_x);
+        x =limit_decimal(CORRECT_DIGIT, x);
+        prev_x = limit_decimal(CORRECT_DIGIT, prev_x);
 
         printf("%d)\t%0.9f --> %.9f --> %.9f --> %.9f\n", iteration, lower_bound, upper_bound, x, function(x));
     }
@@ -97,8 +109,8 @@ double NEWTON_RAPHSON(double random_point) {
         prev_x = x;
         x = prev_x - (function(x)/function_derivative(x));
 
-        x = limit_decimal(9, x);
-        prev_x = limit_decimal(9, prev_x);
+        x = limit_decimal(CORRECT_DIGIT, x);
+        prev_x = limit_decimal(CORRECT_DIGIT, prev_x);
     }
     printf("%d)\t%0.9f --> %.9f \n", iteration+1, prev_x, x);
 
@@ -136,8 +148,8 @@ double REGULA_FALSI(double lower_bound, double upper_bound) {
             }
         }
 
-        x = limit_decimal(9, x);
-        prev_x = limit_decimal(9, prev_x);
+        x = limit_decimal(CORRECT_DIGIT, x);
+        prev_x = limit_decimal(CORRECT_DIGIT, prev_x);
 
         printf("%d)\t%0.9f --> %.9f --> %.9f --> %.9f --> %.9f \n", iteration, prev_x, x, function(lower_bound), function(upper_bound), function(x));
     }
@@ -165,8 +177,8 @@ double SECANT(double lower_bound, double upper_bound) {
         lower_bound = upper_bound;
         upper_bound = x;
 
-        x = limit_decimal(9, x);
-        prev_x = limit_decimal(9, prev_x);
+        x = limit_decimal(CORRECT_DIGIT, x);
+        prev_x = limit_decimal(CORRECT_DIGIT, prev_x);
 
         printf("%d)\t%0.9f --> %.9f --> %.9f --> %.9f --> %.9f \n", iteration, prev_x, x, function(lower_bound), function(upper_bound), function(x));
     }
@@ -187,5 +199,9 @@ double limit_decimal(int max, double num) {
     double processed_num = (int) (num * pow(10, max));
 
     return (double) (processed_num / pow(10, max));
+}
+
+int check_boundary(float lower, float upper) {
+    return function(lower) * function(upper) < 0;
 }
 //-----------------------------------------------//
