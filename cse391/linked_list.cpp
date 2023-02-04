@@ -13,11 +13,6 @@ public:
         this->value = value;
         this->next = NULL;
     }
-
-    Node(const Node& node) {
-        this->value = node.value;
-        this->next = node.next;
-    }
 };
 
 class List {
