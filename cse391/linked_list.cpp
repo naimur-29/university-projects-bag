@@ -1,5 +1,7 @@
 #include <iostream>
 
+using namespace std;
+
 class Node {
 public:
     int value;
@@ -18,51 +20,86 @@ public:
 class List {
 public:
     Node* head;
+    Node* tail;
+    int length = 0;
 
     List() {
         this->head = NULL;
     }
 
     List(int val) {
-        this->head = new Node(val);
+        this->head = this->tail = new Node(val);
     }
 
-    void push_front(int val) {
+    // Functions:
+    int at(int index) {
+        Node* temp = this->head;
+        while(index--) {
+            temp = temp->next;
+        }
+
+        return temp->value;
+    }
+
+    void push_front(int val) {        
+        this->length++;
         if (this->head == NULL) {
-            this->head = new Node(val);
+            this->head = this->tail = new Node(val);
             return;
         }
 
         Node* temp = new Node(val);
-        temp->next = head;
+        temp->next = this->head;
         this->head = temp;
     }
 
     void push_back(int val) {
+        this->length++;
         if (this->head == NULL) {
-            this->head = new Node(val);
+            this->head = this->tail = new Node(val);
             return;
         }
 
-        Node* temp = this->head;
+        Node* temp = new Node(val);
+        this->tail->next = temp;
+        this->tail = temp;
+    }
 
-        while(temp->next != NULL) {
-            temp = temp->next;
+    void insert(int val, int pos) {
+        if (pos == 0) {
+            this->push_front(val);
         }
-        temp->next = new Node(val);
+        else if (pos > -1 && pos < this->length) {
+            Node* temp = this->head;
+            pos--;
+            while(pos--) {
+                temp = temp->next;
+            }
+
+            Node* temp2 = new Node(val);
+            temp2->next = temp->next;
+            temp->next = temp2;
+        }
     }
 };
 
 int main() {
     List list;
 
-    for (int i = 0; i < 10; i++) {
-        list.push_front(110 - (i*10 + 10));
+    for (int i = 0; i < 5; i++) {
+        list.push_front(i+1);
     }
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i+1);
+    }
+
+    list.insert(0, list.length/2);
 
     Node* current = list.head;
     while(current != NULL) {
-        std::cout << current->value << std::endl;
+        cout << current->value << " ";
+
         current = current->next;
     }
 
