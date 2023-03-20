@@ -4,15 +4,15 @@ using namespace std;
 
 class Node {
 public:
-    int value;
+    int data;
     Node *next;
 
     Node() {
         this->next = NULL;
     }
 
-    Node(int value) {
-        this->value = value;
+    Node(int data) {
+        this->data = data;
         this->next = NULL;
     }
 };
@@ -38,7 +38,7 @@ public:
             temp = temp->next;
         }
 
-        return temp->value;
+        return temp->data;
     }
 
     void push_front(int val) {        
@@ -96,11 +96,8 @@ int main() {
 
     list.insert(0, list.length/2);
 
-    Node* current = list.head;
-    while(current != NULL) {
-        cout << current->value << " ";
-
-        current = current->next;
+    for (Node* i = list.head; i != NULL; i = i->next) {
+        cout << i->data << " ";
     }
 
     return 0;
